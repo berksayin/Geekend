@@ -1,3 +1,7 @@
+using AutoMapper;
+using Geekend.API.Utils;
+using Geekend.Service.Interfaces;
+using Geekend.Service.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +30,12 @@ namespace Geekend.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Mapping Creating and Injection
+            var _mappingProfile = new MapperConfiguration(mp => { mp.AddProfile(new MappingProfile()); }); //Folder that we will overwrite.
+            IMapper mapper = _mappingProfile.CreateMapper(); //Creating mapper.
+            services.AddSingleton(mapper); //Injection to project.
+            services.AddScoped<IUserService, UserService>();
+
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
